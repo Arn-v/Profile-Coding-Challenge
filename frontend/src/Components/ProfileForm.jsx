@@ -27,8 +27,6 @@ function ProfileForm( {setProfileImage} )
 
     
 
-
-
     function changeHandler(event)
     {
         if (event.target.name === "profilePicture") {
@@ -36,6 +34,55 @@ function ProfileForm( {setProfileImage} )
                 ...prevState,
                 [event.target.name]: event.target.files[0],
             }));
+
+
+        
+
+        
+        //     const formDataToSend = new FormData();
+
+        //     const profileData = {
+        //         firstName: formData.firstName,
+        //         lastName: formData.lastName,
+        //         email: formData.email,
+        //         address: formData.address
+        //       };
+    
+    
+        //     formDataToSend.append('profileData', JSON.stringify(profileData));
+    
+        //     if (formData.profilePicture) {
+        //         formDataToSend.append('profilePicture', formData.profilePicture);
+        //     }
+    
+
+        //   axios.post( `https://profile-app-backend.onrender.com/api/profile/save`, formDataToSend , {
+        //         withCredentials: true,
+        //         headers: {
+        //             'Content-Type': 'multipart/form-data'
+        //         }
+        //     })
+        //     .then(  (res) => 
+        //            {
+        //             console.log("image uploaded") ; 
+        //             console.log(res);
+        //             // toast.success("Saved Successfully !");
+    
+        //             if ( res.data.data.profilePicture ) {
+        //                 console.log("setting new profile image") ; 
+        //                 setProfileImage( `${res.data.data.profilePicture}` ) ; 
+        //               }
+
+        //               getUserData() ; 
+
+
+        //            })
+        //           .catch(  (error) =>  {
+        //             console.error(error) ; 
+        //             console.log(error.message);
+        //             // toast.error("Error !")
+        //           });
+
         } 
         
         else {
@@ -82,6 +129,8 @@ function ProfileForm( {setProfileImage} )
 
         console.log("FORM DATA after setting state");
         console.log(formData);
+
+        setFormData(responseUserData) ; 
     }
         catch(error) {
             console.log("Error while fetching user profile data") ; 
@@ -100,6 +149,11 @@ function ProfileForm( {setProfileImage} )
 
         //setting image manually at frotend
         // setProfileImage(event.target.files[0]) ; 
+
+        if (!formData.firstName || !formData.lastName || !formData.email) {
+            toast.error("Please fill in all required fields.");
+            return;
+        }
 
         const formDataToSend = new FormData();
 
@@ -177,10 +231,89 @@ function ProfileForm( {setProfileImage} )
 
 
     function resetHandler ( event ) { 
+
         event.preventDefault() ; 
 
-        getUserData(); 
+        axios.post( `https://profile-app-backend.onrender.com/api/profile/reset`,  {
+            withCredentials: true,
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+              .then(  (res) => 
+               {
+                console.log(res);
+                toast.success("Reset Successful !");
+                getUserData() ; 
+
+                // if (res.data.data.profilePicture) {
+                //     console.log("setting new profile image") ; 
+                //     setProfileImage( `${res.data.data.profilePicture}` ) ; 
+                //     // setProfileImage(URL.createObjectURL(event.target.files[0]));
+                //     // `${BACKEND_URL}${res.data.data.profilePicture}`
+                //   }
+               })
+              .catch(  (error) =>  {
+                console.log(error);
+                toast.error("Error !")
+              });
+
+
+
     }
+
+
+
+    const [selectedFile, setSelectedFile] = useState(null);
+
+
+
+    const handleFileChange = async (event) => {
+
+        const file = event.target.files[0];
+        if (!file) {
+            return;
+        }
+
+        setSelectedFile(file);
+        
+        const formDataToSend = new FormData();
+
+        const profileData = {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            address: formData.address
+          };
+
+
+        formDataToSend.append('profileData', JSON.stringify(profileData));
+
+        // if (formData.profilePicture) {
+        //     formDataToSend.append('profilePicture', formData.profilePicture);
+        // }
+        
+        formDataToSend.append('profilePicture', file);
+
+
+
+        try {
+            const response = await axios.post('/api/profile/save', formDataToSend, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            if (response.data.data.profilePicture) {
+                setProfileImage(response.data.data.profilePicture);
+                console.log('Image uploaded successfully!');
+            }
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            console.log('Error uploading image!');
+            toast.error('Please fill all  details before uploading') ; 
+        }
+    };
 
 
 
@@ -206,7 +339,7 @@ function ProfileForm( {setProfileImage} )
                     id="profilePicture"
                     name="profilePicture"
                     style={{ display: 'none' }}
-                    onChange={changeHandler}
+                    onChange={handleFileChange}
                 />
                 
                 <div className='profile-form-container'>
