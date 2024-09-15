@@ -175,10 +175,7 @@ function ProfileForm( {setProfileImage} )
     useEffect(() => {
         console.log(formData) ; 
         getUserData();
-        setFormData(formData) ;
-        return () => {
-        }
-    }  ); 
+    } , [] ); 
 
 
 

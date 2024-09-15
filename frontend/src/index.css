@@ -130,6 +130,7 @@
 .profile-section{
     width:100vw ; 
     max-height:80rem ; 
+    min-height:30rem ; 
 
     display:flex ; 
     justify-content: center;
@@ -464,4 +465,4 @@ input, textarea, select {
   .Toastify__toast--success svg {
     fill: #1879da !important; 
   }
-  
+
