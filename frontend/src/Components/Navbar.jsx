@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import navImg from  "../assets/navImg.png" ; 
+
 import axios from 'axios';
 import { BACKEND_URL } from '../url';
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = 'https://profile-app-backend.onrender.com' || BACKEND_URL ; 
+axios.defaults.baseURL =  BACKEND_URL || 'https://profile-app-backend.onrender.com'  ; 
 
 
 function Navbar( {profileImage} ) {
@@ -42,7 +42,7 @@ function Navbar( {profileImage} ) {
                   <NavLink className="nav-link" to="/events">Events</NavLink>
                   <NavLink className="nav-link" to="">Services</NavLink>
                   <NavLink className="nav-link" to="/support">Support</NavLink>
-                  <NavLink ><div className='nav-img-container'><img className='nav-img' src={profileImage} alt="nav-img"/></div></NavLink>
+                  <NavLink ><div className='nav-img-container'><img className='nav-img' src={profileImage}  alt="profile-pic" /></div></NavLink>
 
                   
 

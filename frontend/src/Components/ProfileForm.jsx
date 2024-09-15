@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { BACKEND_URL } from '../url';
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL =  'https://profile-app-backend.onrender.com' || BACKEND_URL  ; 
+axios.defaults.baseURL =  BACKEND_URL || 'https://profile-app-backend.onrender.com'  ; 
 
 // 'https://profile-app-backend.onrender.com' || BACKEND_URL || 
 
@@ -34,54 +34,6 @@ function ProfileForm( {setProfileImage} )
                 ...prevState,
                 [event.target.name]: event.target.files[0],
             }));
-
-
-        
-
-        
-        //     const formDataToSend = new FormData();
-
-        //     const profileData = {
-        //         firstName: formData.firstName,
-        //         lastName: formData.lastName,
-        //         email: formData.email,
-        //         address: formData.address
-        //       };
-    
-    
-        //     formDataToSend.append('profileData', JSON.stringify(profileData));
-    
-        //     if (formData.profilePicture) {
-        //         formDataToSend.append('profilePicture', formData.profilePicture);
-        //     }
-    
-
-        //   axios.post( `https://profile-app-backend.onrender.com/api/profile/save`, formDataToSend , {
-        //         withCredentials: true,
-        //         headers: {
-        //             'Content-Type': 'multipart/form-data'
-        //         }
-        //     })
-        //     .then(  (res) => 
-        //            {
-        //             console.log("image uploaded") ; 
-        //             console.log(res);
-        //             // toast.success("Saved Successfully !");
-    
-        //             if ( res.data.data.profilePicture ) {
-        //                 console.log("setting new profile image") ; 
-        //                 setProfileImage( `${res.data.data.profilePicture}` ) ; 
-        //               }
-
-        //               getUserData() ; 
-
-
-        //            })
-        //           .catch(  (error) =>  {
-        //             console.error(error) ; 
-        //             console.log(error.message);
-        //             // toast.error("Error !")
-        //           });
 
         } 
         
@@ -124,19 +76,26 @@ function ProfileForm( {setProfileImage} )
 
         // Update profile image in the parent component if necessary
         if (responseUserData.profilePicture) {
-            setProfileImage(`${responseUserData.profilePicture}`);
+            setProfileImage(`${responseUserData.profilePicture }`);
+        }
+        else{
+            setProfileImage("https://res.cloudinary.com/da7bxgnwd/image/upload/v1726326513/default-avatar-icon_awgzwb.jpg") ; 
         }
 
         console.log("FORM DATA after setting state");
         console.log(formData);
 
+        
         setFormData(responseUserData) ; 
+        console.log("setting user form data") ;  
+
     }
         catch(error) {
             console.log("Error while fetching user profile data") ; 
             console.log(error) ;
             console.log(error.message)  ;
         }
+
     }
 
 
@@ -186,7 +145,7 @@ function ProfileForm( {setProfileImage} )
               .then(  (res) => 
                {
                 console.log(res);
-                toast.success("Saved Successfully !");
+                // toast.success("Saved Successfully !");
 
                 if (res.data.data.profilePicture) {
                     console.log("setting new profile image") ; 
@@ -216,10 +175,10 @@ function ProfileForm( {setProfileImage} )
     useEffect(() => {
         console.log(formData) ; 
         getUserData();
-        // setFormData(formData) ;
+        setFormData(formData) ;
         return () => {
         }
-    } , [] ); 
+    }  ); 
 
 
 
@@ -243,7 +202,7 @@ function ProfileForm( {setProfileImage} )
               .then(  (res) => 
                {
                 console.log(res);
-                toast.success("Reset Successful !");
+                // toast.success("Reset Successful !");
                 getUserData() ; 
 
                 // if (res.data.data.profilePicture) {
@@ -311,9 +270,9 @@ function ProfileForm( {setProfileImage} )
         } catch (error) {
             console.error('Error uploading image:', error);
             console.log('Error uploading image!');
-            toast.error('Please fill all  details before uploading') ; 
-        }
-    };
+            toast.error('Please fill all  details before adding profile photo') ;    
+            }
+    }
 
 
 
@@ -371,4 +330,4 @@ function ProfileForm( {setProfileImage} )
     );
 }
 
-export default ProfileForm;
+export default ProfileForm ;

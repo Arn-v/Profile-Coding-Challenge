@@ -366,6 +366,12 @@
 }
 
 
+/* ADDTIONAL THINGS  */
+input, textarea, select {
+    touch-action: manipulation;
+  }
+
+
 
 
 @media ( max-width:770px ){
